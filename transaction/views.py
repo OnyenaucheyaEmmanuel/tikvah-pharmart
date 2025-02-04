@@ -111,22 +111,22 @@ def endTransactionReceipt(request,transNo):
             change = f"""<table class="table text-white h3 p-0 m-0"> 
                             <tr> 
                                 <td class="text-left pl-5"> Total : </td> 
-                                <td class="text-right pr-5"> {request.GET["total"]} $</td> 
+                                <td class="text-right pr-5"> {request.GET["total"]} ₦</td> 
                             </tr> 
                             <tr> 
                                 <td class="text-left pl-5"> Cash : </td> 
-                                <td class="text-right pr-5"> {request.GET["value"]} $</td> 
+                                <td class="text-right pr-5"> {request.GET["value"]} ₦</td> 
                             </tr> 
                             <tr class="h1 badge-danger" >  
                                 <td style="padding-top:15px"> Change : </td> 
-                                <td style="padding-top:15px"> {change*(-1):.2f} $</td> 
+                                <td style="padding-top:15px"> {change*(-1):.2f} ₦</td> 
                             </tr> 
                         </table>"""
         elif request.GET["type"]=="card":
             change = f"""<table class="table text-white h3 p-0 m-0"> 
                             <tr> 
                                 <td class="text-left pl-5"> Total : </td> 
-                                <td class="text-right pr-5"> {request.GET["total"]} $</td> 
+                                <td class="text-right pr-5"> {request.GET["total"]} ₦</td> 
                             </tr> 
                             <tr> 
                                 <td class="text-left pl-5"> Card : </td> 
@@ -182,17 +182,32 @@ def addTransaction(user,payment_type,total,cart,value):
     cart_df["deposit"] = cart_df["deposit_value"].astype(float).apply(lambda x: "" if x==0.00 else x )
     
     # Building Receipt
-    cart_string =  "\n".join(list(cart_df.apply(
-                            lambda row: f"{str(row.name)+')':<3} {row['name'][:28]}".ljust(settings.RECEIPT_CHAR_COUNT)+ "\n"+
-                                            f" {row['barcode']:<13}{row['quantity']:>3}{row['price']:>7}{row['deposit']:>6}{row['tax']:>2}".rjust(settings.RECEIPT_CHAR_COUNT),axis=1)))
-    cart_string = "NAME | BARCODE QTY PRICE DP TAX".rjust(settings.RECEIPT_CHAR_COUNT) + f"\n{'-'*settings.RECEIPT_CHAR_COUNT}\n" + cart_string
-    
+    cart_string = "\n".join(list(cart_df.apply(
+    lambda row: f"{str(row.name)+')':<3} "
+                f"{row['name'][:28]:<10}"  # Ensure name is 28 characters wide
+              
+                f"{row['quantity']:>5}"    # Quantity with 5 spaces
+                f" "
+                f" "
+                f" "
+                f"{row['price']:>5}"       # Price with 8 spaces
+              f" "f" "
+                f"{row['tax']:>4}".rjust(settings.RECEIPT_CHAR_COUNT),  # Tax with 4 spaces and right aligned
+    axis=1)))
+
+# Adding the header with the same width settings for each column
+    cart_string = (
+        "        NAME         QTY  PRICE    TAX".rjust(settings.RECEIPT_CHAR_COUNT) + "\n" +
+        f"{'-' * settings.RECEIPT_CHAR_COUNT}\n" +
+        cart_string
+    )
+
     cart_string = f"Transaction:{transaction_id}".center(settings.RECEIPT_CHAR_COUNT) + f"\n{'-'*int(settings.RECEIPT_CHAR_COUNT)}\n" + cart_string
     
     total_string = f"Sub-Total: {round(total-tax_total,2)}  Tax-Total: {round(tax_total,2)}".center(settings.RECEIPT_CHAR_COUNT)
     total_string = total_string + "\n" + (' - '*int(settings.RECEIPT_CHAR_COUNT/3)) +"\n" + f"{'TOTAL SALE':>10}: {round(total,2)}".rjust(settings.RECEIPT_CHAR_COUNT)
-    total_string = total_string + "\n" + f"{str(payment_type):>10}: $ {round(value,2):.2f}".rjust(settings.RECEIPT_CHAR_COUNT)
-    total_string = total_string + "\n" + f"{'CHANGE':>10}: $ {round(value-total,2):.2f}".rjust(settings.RECEIPT_CHAR_COUNT)
+    total_string = total_string + "\n" + f"{str(payment_type):>10}: ₦ {round(value,2):.2f}".rjust(settings.RECEIPT_CHAR_COUNT)
+    total_string = total_string + "\n" + f"{'CHANGE':>10}: ₦ {round(value-total,2):.2f}".rjust(settings.RECEIPT_CHAR_COUNT)
 
     receipt = settings.RECEIPT_HEADER+ "\n\n" +cart_string+ f"\n{'-'*settings.RECEIPT_CHAR_COUNT}\n{total_string}"+"\n\n" + settings.RECEIPT_FOOTER
     # receipt = settings.RECEIPT_HEADER+f"\n{'*'*int(settings.RECEIPT_CHAR_COUNT)}\n" +cart_string+ f"\n{'-'*settings.RECEIPT_CHAR_COUNT}\n{total_string}"+f"\n{'*'*int(settings.RECEIPT_CHAR_COUNT)}\n" + settings.RECEIPT_FOOTER
