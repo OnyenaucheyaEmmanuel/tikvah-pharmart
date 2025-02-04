@@ -155,7 +155,7 @@ JAZZMIN_SETTINGS = {
 
     # Welcome text on the login screen
     "welcome_sign": "Welcome to the TikVah",
-
+    "custom_css": "css/custom.css",
     # Copyright on the footer
     "copyright": "TikVah Mart Ltd",
     "search_model": "auth.User",

@@ -1,0 +1,17 @@
+/* Change all primary buttons to your custom color */
+.btn-primary {
+    background-color: #ff5733 !important; /* Change this to your preferred color */
+    border-color: #ff5733 !important;
+}
+
+/* Change hover effect */
+.btn-primary:hover {
+    background-color: #e64c29 !important;
+    border-color: #e64c29 !important;
+}
+
+/* Change other buttons if needed */
+.btn-success {
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
+}
