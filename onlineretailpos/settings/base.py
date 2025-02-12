@@ -162,3 +162,4 @@ JAZZMIN_SETTINGS = {
     "copyright": "TikVah Mart Ltd",
     "search_model": "auth.User",
 }
+

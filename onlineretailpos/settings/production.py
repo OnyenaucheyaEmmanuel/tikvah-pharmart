@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 DEBUG = True
-SECRET_KEY = os.getenv('SECRET_KEY_PROD')
+SECRET_KEY = 'i5bp(^x7@ys9yi^phvxy7n&4uin#mrcb$y62dmok8#m*hbkj2u'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost','tikvahpharmacy.onrender.com']
 
