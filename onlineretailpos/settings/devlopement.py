@@ -6,10 +6,10 @@ load_dotenv()
 
 ip_address = socket.gethostbyname(socket.gethostname())
     
-DEBUG = False
+DEBUG = True
 SECRET_KEY = os.getenv('SECRET_KEY_DEV', 'django_dev_secret_key_online-retail-pos-1234')
 
-ALLOWED_HOSTS = ['tikvahpharmacy.onrender.com', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','tikvahpharmacy.onrender.com']
 
 CSRF_TRUSTED_ORIGINS = [f"http://{ip_address}","http://127.0.0.1"]
 
