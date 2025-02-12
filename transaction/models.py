@@ -6,6 +6,50 @@ from inventory.models import product, PERCENTAGE_VALIDATOR
 import pytz
 timezone = pytz.timezone("US/Eastern")
 
+from django.db import models
+from django.conf import settings
+from django.db.models import F
+from inventory.models import product, PERCENTAGE_VALIDATOR
+import pytz
+from django.contrib.auth.models import User
+from decimal import Decimal
+
+timezone = pytz.timezone("US/Eastern")
+
+class Customer(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=15, unique=True, blank=True, null=True)
+    total_spent = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    bonus_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def earn_bonus(self, amount_spent):
+        """For every ₦20,000 spent, the customer gets ₦500 bonus"""
+        self.total_spent += Decimal(amount_spent)
+        new_bonus = (Decimal(amount_spent) // 20000) * 500
+        self.bonus_balance += new_bonus
+        self.save()
+
+    def redeem_bonus(self, amount):
+        """Redeem up to the available bonus balance"""
+        if amount <= self.bonus_balance:
+            self.bonus_balance -= amount
+            self.save()
+            return amount
+        return Decimal(0)
+
+    def __str__(self):
+        return f"{self.name} - Bonus: ₦{self.bonus_balance}"
+
+# from itertools import product
+from django.db import models
+from django.conf import settings
+from django.db.models import F
+from inventory.models import product, PERCENTAGE_VALIDATOR
+import pytz
+timezone = pytz.timezone("US/Eastern")
+
 
 # Create your models here.transaction_dt
 class transaction(models.Model):
@@ -31,10 +75,10 @@ class transaction(models.Model):
             try: item = product.objects.get(barcode = product_item['barcode'])
             except: item = product.objects.get(barcode = product_item['barcode'].split("_")[0])
             productTransaction.objects.create(transaction = self, transaction_id_num = self.transaction_id, transaction_date_time = self.transaction_dt,
-                barcode = product_item['barcode'], name = product_item['name'], department = item.department.department_name, sales_price= product_item['price'],
-                qty = product_item['quantity'], cost_price = item.cost_price, tax_category = item.tax_category.tax_category,tax_percentage= item.tax_category.tax_percentage ,
-                tax_amount = product_item['tax_value'], deposit_category = item.deposit_category.deposit_category,deposit = item.deposit_category.deposit_value ,
-                deposit_amount = product_item['deposit_value'], payment_type= self.payment_type )
+                                              barcode = product_item['barcode'], name = product_item['name'], department = item.department.department_name, sales_price= product_item['price'],
+                                              qty = product_item['quantity'], cost_price = item.cost_price, tax_category = item.tax_category.tax_category, tax_percentage= item.tax_category.tax_percentage,
+                                              tax_amount = product_item['tax_value'], deposit_category = item.deposit_category.deposit_category, deposit = item.deposit_category.deposit_value,
+                                              deposit_amount = product_item['deposit_value'], payment_type= self.payment_type)
         return self
 
     class Meta:
@@ -69,7 +113,6 @@ class productTransaction(models.Model):
 
     class Meta:
         verbose_name_plural = "Product Transactions"
-
 
 from django.db import models
 from django.conf import settings
@@ -116,3 +159,5 @@ class DailyProfit(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.date} - Sales: ₦{self.total_sales} - Profit: ₦{self.total_profit}"
+
+

@@ -111,3 +111,11 @@ class DailyProfitAdmin(admin.ModelAdmin):
     total_profit_display.short_description = "Total Profit"
 
 admin.site.register(DailyProfit, DailyProfitAdmin)
+
+from django.contrib import admin
+from .models import Customer
+
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'phone_number', 'total_spent', 'bonus_balance')
+    search_fields = ('name', 'email', 'phone_number')
