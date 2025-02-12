@@ -3,10 +3,15 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-DEBUG = False
+import os
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+DEBUG = True
 SECRET_KEY = os.getenv('SECRET_KEY_PROD')
 
-ALLOWED_HOSTS = ['tikvahpharmacy.onrender.com', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','tikvahpharmacy.onrender.com']
 
 # SITE_ID = 7
 
@@ -17,18 +22,10 @@ ALLOWED_HOSTS = ['tikvahpharmacy.onrender.com', 'localhost']
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 DATABASES = {
-    #  Set this up if running in production enviournment.
-    
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': os.getenv('DB_NAME'),
-    #     'USER' : os.getenv('DB_USERNAME'),
-    #     'PASSWORD' : os.getenv('DB_PASSWORD'),
-    #     'HOST': os.getenv('DB_HOST'),
-    #     'OPTIONS':{
-    #          'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-    #         }
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
 }
 
 
