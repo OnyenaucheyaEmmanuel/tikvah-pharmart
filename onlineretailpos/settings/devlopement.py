@@ -9,7 +9,8 @@ ip_address = socket.gethostbyname(socket.gethostname())
 DEBUG = False
 SECRET_KEY = os.getenv('SECRET_KEY_DEV', 'django_dev_secret_key_online-retail-pos-1234')
 
-ALLOWED_HOSTS = [ip_address,'127.0.0.1']
+ALLOWED_HOSTS = ['tikvahpharmacy.onrender.com', 'localhost']
+
 CSRF_TRUSTED_ORIGINS = [f"http://{ip_address}","http://127.0.0.1"]
 
 print(f"Connect on this address:") # get the ip address from the command line.

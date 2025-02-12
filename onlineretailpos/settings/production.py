@@ -6,7 +6,8 @@ load_dotenv()
 DEBUG = False
 SECRET_KEY = os.getenv('SECRET_KEY_PROD')
 
-ALLOWED_HOSTS = [ ]
+ALLOWED_HOSTS = ['tikvahpharmacy.onrender.com', 'localhost']
+
 # SITE_ID = 7
 
 
