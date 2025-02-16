@@ -23,26 +23,7 @@ database_dict = {
     'sqlite' :  {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3', 
-        } ,
-    'postgres' : {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME', "OnlineRetailPOS"),  # Use environment variable DB_NAME, defaulting to 'default_db_name'
-            'USER': os.getenv('DB_USERNAME'),  # Use environment variable DB_USERNAME
-            'PASSWORD': os.getenv('DB_PASSWORD'),  # Use environment variable DB_PASSWORD
-            'HOST': os.getenv('DB_HOST', "localhost"),  # Use environment variable DB_HOST
-            'PORT': os.getenv('DB_PORT', ''),  # By default, PostgreSQL uses port 5432
-        } ,
-    'mysql': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv('DB_NAME', "OnlineRetailPOS"),  # Use environment variable DB_NAME
-            'USER': os.getenv('DB_USERNAME'),  # Use environment variable DB_USERNAME
-            'PASSWORD': os.getenv('DB_PASSWORD'),  # Use environment variable DB_PASSWORD
-            'HOST': os.getenv('DB_HOST', "localhost"),  # Use environment variable DB_HOST
-            'PORT': os.getenv('DB_PORT', ''),  
-            'OPTIONS':{
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-                }
-    }
+        } 
 }
 
 print(f"Database configuration is set to {database_dict[os.getenv('NAME_OF_DATABASE', 'sqlite')]['ENGINE']}")
