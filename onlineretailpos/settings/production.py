@@ -7,7 +7,7 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+WSGI_APPLICATION = 'onlineretailpos.wsgi.application'
 DEBUG = True
 SECRET_KEY = 'i5bp(^x7@ys9yi^phvxy7n&4uin#mrcb$y62dmok8#m*hbkj2u'
 
